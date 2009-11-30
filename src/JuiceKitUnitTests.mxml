@@ -5,6 +5,9 @@
 	
 	<mx:Script>
 		<![CDATA[
+		  import flare.tests.DelimitedTextConverterTest;
+		  import flare.tests.StringFormatTests;
+		  import flare.tests.AnimationTests;
 			import flexunit.framework.TestSuite;
 			
 			// Create the test suite and run the tests
@@ -18,10 +21,19 @@
 			private function createSuite():TestSuite {
   				var testSuite:TestSuite = new TestSuite();
   				
-  				testSuite.addTestSuite( StringsTest );
   				testSuite.addTestSuite( LiveQueryTest );
   				testSuite.addTestSuite( GraphUtilTreeMapTest );
-  				testSuite.addTestSuite( DelimitedTextConverterTest );
+  				
+  				// Flare tests
+  				testSuite.addTestSuite( flare.tests.AnimationTests );
+  				testSuite.addTestSuite( flare.tests.DataIOTests );
+  				testSuite.addTestSuite( flare.tests.DataTests );
+  				testSuite.addTestSuite( flare.tests.ExpressionTests );
+  				testSuite.addTestSuite( flare.tests.MatrixTests );
+  				testSuite.addTestSuite( flare.tests.SortTests );
+  				testSuite.addTestSuite( flare.tests.StringFormatTests );
+  				testSuite.addTestSuite( flare.tests.TreeTests );
+  				testSuite.addTestSuite( flare.tests.DelimitedTextConverterTest );
   				
   				return testSuite;
   			}	
