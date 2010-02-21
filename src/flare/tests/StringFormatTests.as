@@ -1,8 +1,8 @@
 package flare.tests
 {
 	import flare.util.Strings;
-
-  import flexunit.framework.TestCase;
+	
+	import flexunit.framework.TestCase;
 	
 	public class StringFormatTests extends TestCase
 	{
@@ -25,6 +25,11 @@ package flare.tests
 			var c:Number = 12345.30100;
 			var num_tests:Array = [
 				// custom formatters
+	      {format:":#,##0.0", input:1234.567, result:"1,234.6"},
+	      {format:":#,##0,", input:1234567, result:"1,235"},
+	      {format:":#,##0.0,", input:1234567, result:"1,234.6"},
+	      {format:":#,##0", input:1000, result:"1,000"},
+	      {format:":#,##0", input:2000, result:"2,000"},
 				{format:":##;(##)", input:-1234, result:"(1234)"},
 				{format:":##", input:1234, result:"1234"},
 				{format:":00", input:1234, result:"1234"},
@@ -78,8 +83,12 @@ package flare.tests
 	            {format:":0", input:32100.123, result:"32100"},
 	            {format:":00", input:32100.123, result:"32100"},
 	            {format:":0,0000,0", input:32100123, result:"32,100,123"},
-	            {format:":00000,0,.000000", input:32100123.123456789, result:"032,100.123123"},
-	            {format:":###.###e#,#%", input:32100.123, result:"3210012.3e%"},
+	            {format:":00000,0,.000000", input:32100123.123456789, result:"32,100,123.123457"},
+	            // Where the comma is placed doesn't matter
+	            {format:":0,00000.000000,", input:32100123.123456789, result:"032,100.123123"},
+	            {format:":00,0000.000000,", input:32100123.123456789, result:"032,100.123123"},
+	            {format:":0000,00.000000,", input:32100123.123456789, result:"032,100.123123"},
+	            {format:":00000,0.000000,", input:32100123.123456789, result:"032,100.123123"},
 	            {format:":0,000%", input:3210.01, result:"321,001%"},
 	            {format:":00%00", input:3210.01, result:"3210%01"},
 	            {format:":0.00e+0-00e0", input:123456789, result:"1.23e+8-45e7"},
@@ -88,7 +97,7 @@ package flare.tests
 	            {format:":0ea.00e+00", input:123456789, result:"1ea.23e+08"},
 	            {format:":###e+00.00", input:123456789, result:"123e+06.46"},
 	            {format:":0.00e+0", input:123456789000000000, result:"1.23e+17"},
-	            {format:":0,0.0,0,,,", input:1234567.89, result:"1,234,567.89"},
+	            {format:":0,0.000,0,,,", input:1234567.89, result:"00.0012"},
 	            {format:":0,0-0-0,0.00", input:1234567.89, result:"1,234,-5-67.89"},
 	            {format:":###000", input:12345, result:"12345"},
 	            {format:":000###", input:12345, result:"012345"},
@@ -125,6 +134,9 @@ package flare.tests
 			var d1:Date = new Date(1979,5,15);
 			var d2:Date = new Date(1979,11,7,13,8,12,123);
 			var date_tests:Array = [
+				{format:":MMM-yy", input:new Date(2010,0,1,0,0,0), result:"Jan-10"},
+				{format:":MMM yy", input:new Date(2010,0,1,0,0,0), result:"Jan 10"},
+				{format:":MMM d yy", input:new Date(2010,0,1), result:"Jan 1 10"},
 				{format:":yyyy/MM/dd", input:d1, result:"1979/06/15"},
 				{format:":yy/MM/dd", input:d1, result:"79/06/15"},
 				{format:":yy/MM/dd", input:d2, result:"79/12/07"},
