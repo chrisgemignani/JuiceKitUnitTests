@@ -1,4 +1,4 @@
-package jk.cases {
+package juicekit.tests {
 
   import flare.query.methods.*;
   
@@ -6,14 +6,13 @@ package jk.cases {
   import mx.utils.ObjectUtil;
   
   import org.flexunit.Assert;
-  import org.flexunit.assertThat;
-  import org.hamcrest.collection.hasItems;
   import org.juicekit.util.data.LiveQuery;
 
 
+  /**
+  * Tests of LiveQuery
+  */
   public class LiveQueryTest {
-    public function LiveQueryTest() {
-    }
 
     public var liveQuery:LiveQuery;
 
@@ -27,7 +26,7 @@ package jk.cases {
 
 
     /**
-    * Test if a query returns result
+    * Test if a query returns result.
     */
     public var tests:Array = [
       { query: select(),
@@ -63,7 +62,11 @@ package jk.cases {
 
 
     /**
-    * Test different results if the arrayCollection has been modified
+    * Test different results if the arrayCollection has been modified.
+    * 
+    * <p><code>resultPre</code> is the LiveQuery result prior to adding the items
+    * in the <code>change</code> Array. <code>result</code> is the result
+    * after the items are added.<p>
     */
     public var testChangeInput:Array = [
       { query: select(),
@@ -86,29 +89,15 @@ package jk.cases {
         
       { query: select('state', {sum: sum('cnt')}).groupby('state'),
         change: [{'state': 'PA', cnt: 1, cnt2: 1}],
-        result: [{state: 'PA', sum: 4}, {state: 'VA', sum: 7}],
+        resultPre: [{state: 'PA', sum: 3}, {state: 'VA', sum: 7}],
         result: [{state: 'PA', sum: 4}, {state: 'VA', sum: 7}] 
         },
-//        
-//      // can provide a single object and the result is the same
-//      { query: select({state: 'state',
-//                       sum: sum('cnt')}).groupby('state'),
-//        result: [{state: 'PA', sum: 3}, {state: 'VA', sum: 7}] },
-//        
-//      { query: select('state', {max: max('cnt')}).groupby('state'),
-//        result: [{state: 'PA', max: 2}, {state: 'VA', max: 4}] },
-//
-//      { query: select('state', {value: min('cnt')}).groupby('state'),
-//        result: [{state: 'PA', value: 1}, {state: 'VA', value: 3}] },
-//
-//      // weighted average
-//      { query: select('state', {value: wtdaverage('cnt','cnt2')}).groupby('state'),
-//        result: [{state: 'PA', value: (2*7+1*8)/(7+8)}, {state: 'VA', value: (4*5+3*6)/(5+6)}] },
-//
-//      // percentage change from first value to second value
-//      // in terms of second value
-//      { query: select('state', {value: pctchange('cnt','cnt2')}).groupby('state'),
-//        result: [{state: 'PA', value: (3-15)/15}, {state: 'VA', value: (7-11)/11}] },
+
+      { query: select('state', {max: max('cnt')}).groupby('state'),
+        change: [{'state': 'PA', cnt: 10.5, cnt2: 1}],
+        resultPre: [{state: 'PA', max: 2}, {state: 'VA', max: 4}], 
+        result: [{state: 'PA', max: 10.5}, {state: 'VA', max: 4}] 
+        },
 
     ];
 
@@ -131,19 +120,37 @@ package jk.cases {
     }
     
 
+    /**
+    * Tests of LiveQuery result before and after a change 
+    * dataProvider.
+    */
     [Test]
     public function liveQueryChangeTests():void {
+      var result:Array;
+      var cmp:int;
+      
       for each (var test:Object in testChangeInput) {
         runBeforeEveryTest();
         liveQuery.query = test.query;
-        // add the items in change to stateData
+
+        // The result prior adding items from test.change
+        result = liveQuery.result.source;
+        cmp = ObjectUtil.compare(result, test.resultPre);
+        Assert.assertEquals(
+          0,
+          cmp
+        )
+
+        // Add the items in change to the dataProvider
         if (test.hasOwnProperty('change')) {
           for each (var itm:Object in test.change) {
             liveQuery.dataProvider.addItem(itm);
           }
         }
-        var result:Array = liveQuery.result.source;
-        var cmp:int = ObjectUtil.compare(result, test.result);
+        
+        // Test the new result
+        result = liveQuery.result.source;
+        cmp = ObjectUtil.compare(result, test.result);
         Assert.assertEquals(
           0,
           cmp
@@ -152,21 +159,9 @@ package jk.cases {
     }
 
 
-
-    [BeforeClass]
-    public static function runBeforeClass():void {
-      // run for one time before all test cases   
-    }
-
-
-
-    [AfterClass]
-    public static function runAfterClass():void {
-      // run for one time after all test cases   
-    }
-
-
-
+    /**
+    * Set up the array collection and LiveQuery
+    */
     [Before(order=1)]
     public function runBeforeEveryTest():void {
       liveQuery = new LiveQuery();
@@ -182,13 +177,6 @@ package jk.cases {
     [After]
     public function runAfterEveryTest():void {
       liveQuery = null;
-    }
-
-
-    [Test]
-    public function isItInHere():void {
-      var someArray:Array = ['a', 'b', 'c', 'd', 'e', 'f'];
-      assertThat(someArray, hasItems("b", "c"));
     }
 
   }

@@ -1,6 +1,6 @@
-package jk {
-  import jk.cases.GraphUtilTreeMapTest;
-  import jk.cases.LiveQueryTest;
+package juicekit {
+  import juicekit.tests.GraphUtilTreeMapTest;
+  import juicekit.tests.LiveQueryTest;
   
 
 	[Suite]

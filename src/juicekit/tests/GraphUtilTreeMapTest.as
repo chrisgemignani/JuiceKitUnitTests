@@ -1,4 +1,4 @@
-package jk.cases {
+package juicekit.tests {
 
   import flare.query.methods.*;
   import flare.vis.data.NodeSprite;
@@ -10,6 +10,9 @@ package jk.cases {
   
   import org.juicekit.util.data.GraphUtil;
 
+  /**
+  * Tests of treemap generation with GraphUtil.treeMap
+  */
   public class GraphUtilTreeMapTest extends TestCase {
     public var stateData:ArrayCollection = new ArrayCollection([
      {state: 'VA', cnt: 1},

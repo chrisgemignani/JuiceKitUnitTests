@@ -6,18 +6,18 @@
       import org.flexunit.runner.FlexUnitCore;
       import org.flexunit.listeners.UIListener;
       import flare.FlareSuite;
-      import jk.JuiceKitSuite;
+      import juicekit.JuiceKitSuite;
+
 
       private var core:FlexUnitCore;
-
 
 
       public function runMe():void {
 
         core = new FlexUnitCore();
 
-        /* 				assertEquals( 1, 2 );
-         */ //Listeners for CI systems or Flash Builder Plugins 
+        //assertEquals( 1, 2 );
+        //Listeners for CI systems or Flash Builder Plugins 
         //core.addListener( new CIListener());
         //core.addListener( new XMLListener( "FlexUnit4Test" ) );
 
@@ -62,7 +62,7 @@
       }
     ]]>
   </mx:Script>
-  
+
   <mx:Style>	
 		Application {
 			   backgroundColor: #3872b2;
