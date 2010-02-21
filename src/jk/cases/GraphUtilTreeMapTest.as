@@ -1,4 +1,4 @@
-package {
+package jk.cases {
 
   import flare.query.methods.*;
   import flare.vis.data.NodeSprite;
